@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>专升本五周复习计划 · 交互版</title>
+<style>
+:root {
+  --navy-deep:#1F4E79; --navy:#2E75B6; --navy-light:#9DC3E6; --navy-pale:#EAF1F8;
+  --warm:#FAF6EF; --warm-card:#FFFDF8; --warm-line:#E8DCC8; --amber:#C97B2D;
+  --amber-soft:#F6E4CB; --ink:#2B2B2B; --ink-2:#5E5E5E; --line:#D9E2EC;
+  --green:#2E7D32; --red:#B71C1C;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body {
+  background:var(--warm); color:var(--ink);
+  font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  line-height:1.75; font-size:15px;
+}
+.container { max-width:1200px; margin:0 auto; padding:0 20px 40px; }
+.topbar {
+  background:linear-gradient(135deg,#17395C 0%,var(--navy) 55%,#3E7CB1 100%);
+  color:#fff; padding:16px 20px; position:sticky; top:0; z-index:100;
+  box-shadow:0 2px 12px rgba(31,78,121,.25);
+}
+.topbar-inner { max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+.topbar h1 { font-size:18px; font-weight:700; letter-spacing:1px; }
+.topbar .countdown { font-size:13px; opacity:.9; }
+.nav { display:flex; gap:6px; flex-wrap:wrap; }
+.nav-btn {
+  background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.25);
+  color:#fff; padding:6px 14px; border-radius:20px; cursor:pointer;
+  font-size:13px; transition:all .2s; white-space:nowrap;
+}
+.nav-btn:hover, .nav-btn.active { background:#fff; color:var(--navy-deep); font-weight:600; }
+.page { display:none; animation:fadeIn .3s ease; }
+.page.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:translateY(0);} }
+.card {
+  background:var(--warm-card); border:1px solid var(--warm-line);
+  border-radius:10px; padding:24px 28px; margin-top:20px;
+  box-shadow:0 2px 6px rgba(31,78,121,.08);
+}
+.card-title {
+  font-size:20px; font-weight:700; color:var(--navy-deep);
+  margin-bottom:16px; padding-bottom:10px;
+  border-bottom:2px solid var(--navy-pale); display:flex; align-items:center; gap:10px;
+}
+.card-title .badge { background:var(--navy); color:#fff; font-size:11px; padding:2px 10px; border-radius:20px; font-weight:500; }
+table { width:100%; border-collapse:collapse; background:var(--warm-card); font-size:13.5px; }
+th { background:var(--navy-deep); color:#fff; font-weight:600; padding:9px 12px; text-align:left; }
+td { padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top; }
+tr:nth-child(even) td { background:#F8FAFD; }
+.tbl-note { font-size:12px; color:var(--ink-2); margin-top:8px; }
+.gantt { background:var(--warm-card); border:1px solid var(--warm-line); border-radius:10px; padding:18px 16px 10px; overflow-x:auto; }
+.gantt table { border:none; min-width:760px; }
+.gantt th,.gantt td { border:none; }
+.gantt thead th { background:transparent; color:var(--navy-deep); text-align:center; font-weight:700; border-bottom:2px solid var(--navy-light); font-size:13px; padding:6px 4px; }
+.gantt td { background:#fff; border-bottom:1px solid var(--warm-line); padding:8px 4px; text-align:center; }
+.gantt td.rowlabel { text-align:left; font-weight:600; color:var(--navy-deep); background:#F8FAFD; width:160px; font-size:13px; }
+.bar { display:block; border-radius:6px; padding:6px 8px; font-size:11.8px; line-height:1.45; color:#fff; min-height:34px; text-align:left; }
+.bar small { display:block; opacity:.9; font-size:10.6px; }
+.c-comp { background:var(--navy); }
+.c-math { background:#3A7D5E; }
+.c-pol { background:var(--amber); }
+.c-eng { background:#7A5BA6; }
+.week-goal { font-size:12.2px; text-align:left; color:var(--ink); background:#FFFDF6 !important; border-left:3px solid var(--amber); }
+.day-grid { background:var(--warm-card); border:1px solid var(--warm-line); border-radius:10px; padding:20px; overflow-x:auto; }
+.gridwrap { display:grid; grid-template-columns:92px repeat(4,1fr); gap:8px; min-width:720px; }
+.gcell { background:#F8FAFD; border:1px solid var(--line); border-radius:8px; padding:8px 10px; font-size:12px; }
+.gcell .t { font-weight:700; color:var(--navy-deep); font-size:12.5px; margin-bottom:2px; }
+.gcell .d { color:var(--ink); font-size:11.8px; line-height:1.5; }
+.gcell .p { color:var(--amber); font-size:10.8px; margin-top:3px; font-weight:600; }
+.ghead { font-weight:700; color:#fff; background:var(--navy-deep); text-align:center; border-radius:8px; padding:9px 6px; font-size:13px; }
+.gtime { font-weight:700; color:var(--navy-deep); background:var(--navy-pale); text-align:center; border-radius:8px; padding:9px 6px; font-size:12px; }
+.tomato-rule { background:var(--navy-pale); border-left:4px solid var(--navy); border-radius:0 8px 8px 0; padding:12px 18px; font-size:13px; margin-top:16px; color:var(--ink); }
+.strat-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:18px; margin-top:16px; }
+.strat { background:var(--warm-card); border:1px solid var(--warm-line); border-radius:12px; overflow:hidden; box-shadow:0 2px 8px rgba(31,78,121,.08); }
+.strat-head { padding:14px 18px; color:#fff; display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:6px; cursor:pointer; }
+.s-comp .strat-head { background:linear-gradient(120deg,#1F4E79,#2E75B6); }
+.s-math .strat-head { background:linear-gradient(120deg,#2C6150,#3A7D5E); }
+.s-pol .strat-head { background:linear-gradient(120deg,#A96A23,#C97B2D); }
+.s-eng .strat-head { background:linear-gradient(120deg,#5C4284,#7A5BA6); }
+.strat-head h4 { font-family:Georgia,"Songti SC","SimSun",serif; font-size:17px; letter-spacing:.03em; }
+.strat-head .score { font-size:12px; opacity:.92; text-align:right; }
+.strat-head .score b { display:block; font-size:14px; }
+.strat-body { padding:16px 18px 18px; }
+.strat-body h5 { font-size:13px; color:var(--navy-deep); margin:12px 0 6px; font-weight:700; }
+.strat-body h5:first-child { margin-top:0; }
+.strat-body ul { list-style:none; }
+.strat-body li { font-size:13px; padding:3px 0 3px 18px; position:relative; color:var(--ink); }
+.strat-body li::before { content:"\25B8"; position:absolute; left:2px; color:var(--amber); font-weight:700; }
+.strat-body.collapsed { display:none; }
+.tip { font-size:12px; color:var(--ink-2); background:var(--amber-soft); border-radius:6px; padding:6px 10px; margin-top:8px; }
+.rescue { border:1px solid var(--warm-line); border-radius:10px; overflow:hidden; margin-top:14px; }
+.rescue-row { display:grid; grid-template-columns:230px 1fr; background:var(--warm-card); border-bottom:1px solid var(--warm-line); }
+.rescue-row:last-child { border-bottom:none; }
+.rescue-row .lbl { background:var(--navy-pale); padding:14px 16px; font-weight:700; color:var(--navy-deep); font-size:13.5px; border-right:1px solid var(--line); display:flex; align-items:center; }
+.rescue-row .body { padding:14px 18px; font-size:13px; color:var(--ink); }
+.rescue-row .body ul { list-style:none; }
+.rescue-row .body li { padding:3px 0 3px 18px; position:relative; }
+.rescue-row .body li::before { content:"\25AA"; position:absolute; left:0; color:var(--amber); }
+.rescue-flag { display:inline-block; background:var(--amber); color:#fff; font-size:11px; font-weight:700; border-radius:10px; padding:1px 10px; margin-left:8px; vertical-align:1px; }
+@media (max-width:820px) { .rescue-row { grid-template-columns:1fr; } .rescue-row .lbl { border-right:none; border-bottom:1px solid var(--line); } }
+.checkin-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin-top:16px; }
+.checkin-card { background:var(--warm-card); border:1px solid var(--warm-line); border-radius:10px; padding:18px; text-align:center; }
+.checkin-card h4 { color:var(--navy-deep); margin-bottom:8px; }
+.checkin-card .target { font-size:12px; color:var(--ink-2); margin-bottom:12px; }
+.counter { display:flex; align-items:center; justify-content:center; gap:12px; margin:12px 0; }
+.counter button { width:36px; height:36px; border-radius:50%; border:none; background:var(--navy); color:#fff; font-size:18px; cursor:pointer; transition:background .2s; }
+.counter button:hover
+ { background:var(--navy-deep); }
+.counter .num { font-size:28px; font-weight:700; color:var(--navy-deep); min-width:40px; }
+.progress-bar { height:8px; background:var(--navy-pale); border-radius:4px; overflow:hidden; margin-top:8px; }
+.progress-bar .fill { height:100%; background:var(--navy); border-radius:4px; transition:width .3s; }
+.btn-save { background:var(--navy); color:#fff; border:none; padding:10px 28px; border-radius:8px; font-size:14px; cursor:pointer; margin-top:16px; transition:background .2s; }
+.btn-save:hover { background:var(--navy-deep); }
+.saved-msg { color:var(--green); font-size:13px; margin-top:8px; opacity:0; transition:opacity .3s; }
+.saved-msg.show { opacity:1; }
+.stat-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; margin-top:16px; }
+.stat-card { background:var(--warm-card); border:1px solid var(--warm-line); border-radius:10px; padding:18px; }
+.stat-card h4 { color:var(--navy-deep); font-size:14px; margin-bottom:10px; }
+.stat-bar { display:flex; align-items:center; gap:10px; margin:8px 0; font-size:13px; }
+.stat-bar .label { width:80px; color:var(--ink-2); }
+.stat-bar .track { flex:1; height:10px; background:var(--navy-pale); border-radius:5px; overflow:hidden; }
+.stat-bar .track .fill { height:100%; border-radius:5px; transition:width .3s; }
+.stat-bar .pct { width:40px; text-align:right; font-weight:600; }
+.stat-big { font-size:32px; font-weight:700; color:var(--navy); }
+.stat-label { font-size:12px; color:var(--ink-2); }
+.priority-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; margin-top:16px; }
+.prio-card {
+  background:var(--warm-card); border:1px solid var(--warm-line);
+  border-top:5px solid var(--navy); border-radius:10px;
+  padding:18px 16px 14px; transition:transform .2s;
+}
+.prio-card:hover { transform:translateY(-2px); box-shadow:0 4px 12px rgba(31,78,121,.12); }
+.prio-card.p1 { border-top-color:var(--navy); }
+.prio-card.p2 { border-top-color:#3A7D5E; }
+.prio-card.p3 { border-top-color:var(--amber); }
+.prio-card.p4 { border-top-color:#7A5BA6; }
+.prio-card .tag { display:inline-block; background:var(--navy); color:#fff; font-size:11.5px; font-weight:700; padding:2px 10px; border-radius:12px; margin-bottom:8px; }
+.prio-card .tag.g2 { background:#3A7D5E; }
+.prio-card .tag.g3 { background:var(--amber); }
+.prio-card .tag.g4 { background:#7A5BA6; }
+.prio-card h4 { font-size:15px; color:var(--navy-deep); margin-bottom:4px; }
+.prio-card .meta { font-size:12px; color:var(--ink-2); margin-bottom:8px; }
+.prio-card ul { list-style:none; }
+.prio-card li { font-size:12.8px; padding:3px 0 3px 16px; position:relative; color:var(--ink); }
+.prio-card li::before { content:""; position:absolute; left:2px; top:13px; width:6px; height:6px; border-radius:50%; background:var(--amber); }
+
+.week-switcher { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+.week-btn { background:#fff; border:1px solid var(--line); padding:6px 16px; border-radius:20px; cursor:pointer; font-size:13px; transition:all .2s; }
+.week-btn:hover, .week-btn.active { background:var(--navy); color:#fff; border-color:var(--navy); }
+.today-header { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:16px; }
+.today-header .date-info { font-size:14px; color:var(--ink-2); }
+.today-header .week-info { font-size:16px; font-weight:700; color:var(--navy-deep); }
+.task-list { display:flex; flex-direction:column; gap:10px; }
+.task-item { display:flex; align-items:center; gap:12px; background:#fff; border:1px solid var(--line); border-radius:8px; padding:12px 16px; cursor:pointer; transition:all .2s; }
+.task-item:hover { border-color:var(--navy-light); }
+.task-item.done { background:#E8F5E9; border-color:#A5D6A7; }
+.task-item .chk { width:20px; height:20px; border:2px solid var(--navy); border-radius:4px; display:flex; align-items:center; justify-content:center; flex:none; }
+.task-item.done .chk { background:var(--green); border-color:var(--green); }
+.task-item.done .chk::after { content:"\2713"; color:#fff; font-size:12px; }
+.task-item .txt { flex:1; font-size:14px; }
+.task-item.done .txt { text-decoration:line-through; color:var(--ink-2); }
+.task-item .tag { font-size:11px; padding:2px 8px; border-radius:12px; background:var(--navy-pale); color:var(--navy-deep); }
+.note { font-size:12px; color:var(--ink-2); background:#F1EBDD; border:1px dashed var(--warm-line); border-radius:8px; padding:10px 16px; margin-top:16px; }
+footer { text-align:center; font-size:12px; color:var(--ink-2); padding:30px 0 10px; }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-inner">
+    <div>
+      <h1>📘 专升本五周复习计划</h1>
+      <div class="countdown">距离考试还有 <strong id="daysLeft">187</strong> 天</div>
+    </div>
+    <div class="nav">
+      <button class="nav-btn active" data-page="diagnosis">🎯 诊断排序</button>
+      <button class="nav-btn" data-page="today">📋 今日任务</button>
+      <button class="nav-btn" data-page="week">📅 五周计划</button>
+      <button class="nav-btn" data-page="schedule">⏰ 每日时间表</button>
+      <button class="nav-btn" data-page="strategy">📚 学习策略</button>
+      <button class="nav-btn" data-page="emergency">🚨 应急方案</button>
+      <button class="nav-btn" data-page="checkin">✅ 打卡记录</button>
+      <button class="nav-btn" data-page="stats">📊 进度统计</button>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ====== 诊断排序 ====== -->
+<div class="page active" id="page-diagnosis">
+  <div class="card">
+    <div class="card-title">🎯 薄弱环节诊断与优先级排序 <span class="badge">按掌握程度 × 考试权重</span></div>
+    <p style="font-size:13.5px;color:var(--ink-2);margin-bottom:4px;">综合 <b>科目当前掌握程度</b> 与 <b>考试分值权重</b> 两个维度评估。优先级规则：P1 最高，优先分配每日黄金时段与更多番茄钟；整体投入比 计算机 : 高数 : 英语 : 政治 ≈ 5 : 4 : 3 : 3。</p>
+    <div class="priority-grid">
+      <div class="prio-card p1">
+        <div class="tag">P1 · 最高优先级</div>
+        <h4>💻 计算机基础与程序设计</h4>
+        <div class="meta">权重 40%（200 分）｜进度 ~C语言第4章（scanf）｜缺口：主干未过半</div>
+        <ul>
+          <li><b>薄弱诊断</b>：C 语言主干（数组/函数/指针/结构体/文件）几乎全未展开，数据结构尚未启动</li>
+          <li><b>影响</b>：单科占总分 40%，拉分空间最大，且是程序类科目需长周期消化</li>
+          <li><b>措施</b>：每日 1 个黄金时段（上午/下午首段）+ 上机实践；例题独立敲一遍，忌只看书</li>
+        </ul>
+      </div>
+      <div class="prio-card p2">
+        <div class="tag g2">P2 · 高优先级</div>
+        <h4>📐 高等数学</h4>
+        <div class="meta">权重 20%（100 分）｜进度 ~第二章（连续性）｜缺口：导数微分未学</div>
+        <ul>
+          <li><b>薄弱诊断</b>：导数与微分、积分两大核心区尚未进入，计算量训练不足</li>
+          <li><b>影响</b>：计算题/综合题占大头，运算熟练度需每日保鲜</li>
+          <li><b>措施</b>：每日固定时段推进新课 + 10 题计算练习；错题本只记"卡壳点"</li>
+        </ul>
+      </div>
+      <div class="prio-card p3">
+        <div class="tag g3">P3 · 稳定推进</div>
+        <h4>📝 英语</h4>
+        <div class="meta">权重 20%（100 分）｜进度：背单词 + 语法巩固中｜缺口：写作偏弱</div>
+        <ul>
+          <li><b>薄弱诊断</b>：词汇量未达 3500 基线，语篇阅读量不足，写作模板空白</li>
+          <li><b>影响</b>：阅读/完形（分值大头）依赖词汇量，写作 15 分靠模板可快速补齐</li>
+          <li><b>措施</b>：词汇每日滚动不掉队；第 2 周起精读保底；第 4 周集中写作攻坚</li>
+        </ul>
+      </div>
+      <div class="prio-card p4">
+        <div class="tag g4">P4 · 按节奏推进</div>
+        <h4>📜 政治理论</h4>
+        <div class="meta">权重 20%（100 分）｜进度 ~毛概第4章｜缺口：习概未启动、主观题未训练</div>
+        <ul>
+          <li><b>薄弱诊断</b>：毛概已过半，但习概（新思想，分值占比上升）尚未启动</li>
+          <li><b>影响</b>：选择靠理解、主观靠背诵；背诵类可后置，前期以框架+选择保分</li>
+          <li><b>措施</b>：每日 1.5h 推进章节 + 配套选择 20 题；第 4 周起启动背诵清单</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note">建议每周复盘时回到本页：对四科进度重新打分（未启动 0 分 → 熟练 10 分），落后科目自动升优先级，动态调整当周番茄分配。</div>
+  </div>
+</div>
+
+<!-- ====== 今日任务 ====== -->
+<div class="page" id="page-today">
+  <div class="card">
+    <div class="today-header">
+      <div>
+        <div class="week-info" id="todayWeekTitle">第 1 周 · 基础启动期</div>
+        <div class="date-info" id="todayDate"></div>
+      </div>
+    </div>
+    <div class="task-list" id="todayTasks"></div>
+    <div class="note">点击任务可标记完成/未完成，刷新后状态保留（localStorage）</div>
+  </div>
+</div>
+
+<!-- ====== 五周计划 ====== -->
+<div class="page" id="page-week">
+  <div class="card">
+    <div class="card-title">📅 五周总体安排 <span class="badge">甘特图</span></div>
+    <div class="week-switcher">
+      <button class="week-btn active" data-w="1">第 1 周</button>
+      <button class="week-btn" data-w="2">第 2 周</button>
+      <button class="week-btn" data-w="3">第 3 周</button>
+      <button class="week-btn" data-w="4">第 4 周</button>
+      <button class="week-btn" data-w="5">第 5 周</button>
+    </div>
+    <div id="weekContent"></div>
+  </div>
+</div>
+<!-- ====== 每日时间表 ====== -->
+<div class="page" id="page-schedule">
+  <div class="card">
+    <div class="card-title">⏰ 每日时间分配表 <span class="badge">番茄工作法</span></div>
+    <div class="day-grid">
+      <div class="gridwrap">
+        <div class="gtime">时段</div><div class="ghead">07:30–08:00</div><div class="ghead">08:00–11:50</div><div class="ghead">14:00–17:20</div><div class="ghead">19:00–21:30</div>
+
+        <div class="gtime">周一 / 三 / 五</div>
+        <div class="gcell"><div class="t">英语 · 词汇打卡</div><div class="d">新词 30 + 复习旧词</div><div class="p">≈ 2 番茄</div></div>
+        <div class="gcell"><div class="t">高等数学（2h）</div><div class="d">新课 → 例题手写 → 计算练习 10 题<br>10:00–10:20 大休息</div><div class="p">4 番茄</div></div>
+        <div class="gcell"><div class="t">计算机（2h）</div><div class="d">章节精读 + 例程上机；章节习题 + 错题重做<br>16:00–16:15 大休息</div><div class="p">4 番茄</div></div>
+        <div class="gcell"><div class="t">政治（1.5h）</div><div class="d">推进 1 章 → 配套选择 20 题</div><div class="p">3 番茄</div></div>
+
+        <div class="gtime">周二 / 四</div>
+        <div class="gcell"><div class="t">英语 · 词汇打卡</div><div class="d">复习前 3 天单词</div><div class="p">≈ 2 番茄</div></div>
+        <div class="gcell"><div class="t">计算机（2h）</div><div class="d">上机日：程序全敲一遍 + 改错</div><div class="p">4 番茄</div></div>
+        <div class="gcell"><div class="t">英语（1.5h）</div><div class="d">精读 2 篇（限时）→ 逐句翻译 → 生词摘录</div><div class="p">3 番茄</div></div>
+        <div class="gcell"><div class="t">政治（1.5h）</div><div class="d">选择专项 / 主观题方法</div><div class="p">3 番茄</div></div>
+
+        <div class="gtime">周六</div>
+        <div class="gcell"><div class="t">词汇 + 时政</div><div class="d">单词总复习 1 轮；时政周报 30 分钟</div><div class="p">≈ 3 番茄</div></div>
+        <div class="gcell"><div class="t">整卷模考（3h）</div><div class="d">按考试时长做一套高数或计算机</div><div class="p">6 番茄</div></div>
+        <div class="gcell"><div class="t">英语写作 / 完形专项</div><div class="d">写作仿写或完形 2 篇</div><div class="p">3 番茄</div></div>
+        <div class="gcell"><div class="t">周复盘（1h）</div><div class="d">验收项勾选；整理错题；微调下周计划</div><div class="p">2 番茄</div></div>
+
+        <div class="gtime">周日</div>
+        <div class="gcell"><div class="t">休息调整</div><div class="d">睡够、运动；轻量任务</div><div class="p">≤ 2 番茄</div></div>
+        <div class="gcell"><div class="t">整卷模考 / 错题重做（2h）</div><div class="d">另一科目整套仿真；错题重做并归类</div><div class="p">4 番茄</div></div>
+        <div class="gcell"><div class="t">机动缓冲（1h）</div><div class="d">补本周未完成任务 / 预习下周</div><div class="p">2 番茄</div></div>
+        <div class="gcell"><div class="t">下周预习（0.5h）</div><div class="d">浏览下周章节标题与考点清单</div><div class="p">1 番茄</div></div>
+      </div>
+    </div>
+    <div class="tomato-rule">
+      <b>番茄工作法执行规则：</b>一个番茄 = 25 分钟专注 + 5 分钟休息 → 每 4 个番茄 = 1 个循环，循环后休息 <b>15–20 分钟</b>。
+      专注期间手机放另一房间；单日番茄总数平日 14–16 个（约 7 小时）、周末 16–18 个（约 8 小时）。
+    </div>
+  </div>
+</div>
+<!-- ====== 学习策略 ====== -->
+<div class="page" id="page-strategy">
+  <div class="card">
+    <div class="card-title">📚 各科学习策略 <span class="badge">点击卡片展开详情</span></div>
+    <div class="strat-grid">
+      <div class="strat s-comp">
+        <div class="strat-head" onclick="toggleStrat(this)">
+          <h4>💻 计算机基础与程序设计</h4>
+          <div class="score">权重 <b>40%（200 分）</b></div>
+        </div>
+        <div class="strat-body">
+          <h5>考纲要点</h5>
+          <ul>
+            <li>C 语言为主体：顺序/选择/循环、数组、函数、指针、结构体、文件 —— 约六成以上分值</li>
+            <li>数据结构：线性表、栈队列、树、查找、排序</li>
+            <li>参考教材：谭浩强《C 语言程序设计》、数据结构教材（严蔚敏版）</li>
+          </ul>
+          <h5>复习路径</h5>
+          <ul>
+            <li><strong>补 C 语言主干</strong>（第 1–3 周）：循环 → 数组 → 函数 → 指针 → 结构体 → 文件</li>
+            <li><strong>转数据结构</strong>（第 4 周起）：线性表 + 栈队列 → 树、查找与排序</li>
+            <li><strong>真题化</strong>：第 5 周刷真题，按题型吃透</li>
+          </ul>
+          <div class="tip">避坑：只看书不敲代码 = 假掌握；scanf 的取地址符 &amp;amp; 细节务必逐条过关</div>
+        </div>
+      </div>
+
+      <div class="strat s-math">
+        <div class="strat-head" onclick="toggleStrat(this)">
+          <h4>📐 高等数学</h4>
+          <div class="score">权重 <b>20%（100 分）</b></div>
+        </div>
+        <div class="strat-body">
+          <h5>考纲要点</h5>
+          <ul>
+            <li>核心区：函数与极限、一元微分学、一元积分学</li>
+            <li>扩展区：多元微分、常数项级数、常微分方程</li>
+            <li>题型：单选 + 填空 + <strong>计算题</strong> + 综合题</li>
+          </ul>
+          <h5>复习路径</h5>
+          <ul>
+            <li><strong>微分学夯实</strong>（第 1–2 周）：导数定义与四则、复合/隐函数求导、中值定理</li>
+            <li><strong>积分学打通</strong>（第 3 周）：不定积分换元 + 分部，定积分牛顿—莱布尼茨公式</li>
+            <li><strong>扩展区扫尾</strong>（第 4–5 周）：二重积分、一阶微分方程、级数审敛法</li>
+          </ul>
+          <div class="tip">避坑：单选/填空压轴偏题果断放弃，把计算与综合拿稳即可 80+</div>
+        </div>
+      </div>
+      <div class="strat s-pol">
+        <div class="strat-head" onclick="toggleStrat(this)">
+          <h4>📜 政治理论</h4>
+          <div class="score">权重 <b>20%（100 分）</b></div>
+        </div>
+        <div class="strat-body">
+          <h5>考纲要点</h5>
+          <ul>
+            <li>教材：毛概（2023 版）+ 习概（2023 版），新思想占比持续上升</li>
+            <li>题型：单选 + 多选 + 辨析 + 问答 + 论述 + 材料</li>
+          </ul>
+          <h5>复习路径</h5>
+          <ul>
+            <li><strong>框架先行</strong>（第 1–2 周）：毛概收尾 + 习概 1–5 章，每章"一页纸框架图"</li>
+            <li><strong>主观题方法</strong>（第 3 周）：原理 → 展开论点 → 结合材料 → 结论</li>
+            <li><strong>背诵启动</strong>（第 4 周起）：高频简答/论述要点 20 条，关键词 + 口诀</li>
+          </ul>
+          <div class="tip">避坑：别盲目抄书式笔记（时间黑洞）；时政不要考前突击</div>
+        </div>
+      </div>
+
+      <div class="strat s-eng">
+        <div class="strat-head" onclick="toggleStrat(this)">
+          <h4>📝 英语</h4>
+          <div class="score">权重 <b>20%（100 分）</b></div>
+        </div>
+        <div class="strat-body">
+          <h5>考纲要点</h5>
+          <ul>
+            <li>词汇要求约 3500 词</li>
+            <li>题型：阅读 + 完形 + 语法填空 + 选句匹配 + 写作</li>
+            <li>命题倾向：去语法单选化，重词汇量与语篇理解</li>
+          </ul>
+          <h5>复习路径</h5>
+          <ul>
+            <li><strong>词汇每日滚动</strong>：新词 50–80 + 旧词复习（1/2/4/7/15 天间隔）</li>
+            <li><strong>阅读保底</strong>（第 2 周起）：每日精读 2 篇，限时 15 分钟</li>
+            <li><strong>写作攻坚</strong>（第 4 周起）：背 5–10 篇应用文模板，每周仿写 1–2 篇</li>
+          </ul>
+          <div class="tip">避坑：只背单词不读文章 = 假熟悉；写作宁用简单正确句</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ====== 应急方案 ====== -->
+<div class="page" id="page-emergency">
+  <div class="card">
+    <div class="card-title">🚨 进度落后应急方案 <span class="badge">分级处理</span></div>
+    <div class="rescue">
+      <div class="rescue-row">
+        <div class="lbl">自检三步<span class="rescue-flag">判断</span></div>
+        <div class="body">
+          <ul>
+            <li>① 查验收项：对照当周表格逐条打勾</li>
+            <li>② 归因：时间不够（A 档）还是学不懂（B 档）？</li>
+            <li>③ 定口子：≤3 天=轻度；≤1 周=中度；&gt;1 周=重度</li>
+          </ul>
+        </div>
+      </div>
+      <div class="rescue-row">
+        <div class="lbl">A 档 · 时间不足<span class="rescue-flag">轻度</span></div>
+        <div class="body">
+          <ul>
+            <li><strong>动用晚间机动</strong>：19:00–21:30 定向补落后科目</li>
+            <li><strong>周末借时</strong>：周日机动缓冲时段优先补课</li>
+            <li><strong>削枝保干</strong>：暂停拓展类任务，只保主干</li>
+          </ul>
+        </div>
+      </div>
+      <div class="rescue-row">
+        <div class="lbl">B 档 · 学不懂<span class="rescue-flag">方法</span></div>
+        <div class="body">
+          <ul>
+            <li><strong>换输入源</strong>：教材看不懂换网课，最多换 2 种讲法</li>
+            <li><strong>降粒度</strong>：把"一章"拆成"节—小节—例题"</li>
+            <li><strong>先用后懂</strong>：先背套路做 5 道题，再回看原理</li>
+          </ul>
+        </div>
+      </div>
+      <div class="rescue-row">
+        <div class="lbl">C 档 · 单科落后超 1 周<span class="rescue-flag">中度</span></div>
+        <div class="body">
+          <ul>
+            <li><strong>临时提档</strong>：落后科目升至每日 2 个时段</li>
+            <li><strong>砍边际考点</strong>：跳过边际考点，只保主干</li>
+            <li><strong>下调验收线</strong>：从"全对率 80%"降为"核心考点过一遍"</li>
+          </ul>
+        </div>
+      </div>
+      <div class="rescue-row">
+        <div class="lbl">D 档 · 多科落后<span class="rescue-flag">重度</span></div>
+        <div class="body">
+          <ul>
+            <li><strong>全局重排</strong>：保计算机（40%）+ 高数计算题</li>
+            <li><strong>五周顺延为六周</strong>：框架不变，落后内容并入下周</li>
+            <li><strong>启动保底计划</strong>：每科只学高频考点清单</li>
+          </ul>
+        </div>
+      </div>
+      <div class="rescue-row">
+        <div class="lbl">每周固定动作<span class="rescue-flag">防失控</span></div>
+        <div class="body">
+          <ul>
+            <li><strong>周日 30 分钟周复盘</strong>：验收 + 错题归类 + 计划微调</li>
+            <li><strong>番茄账本</strong>：连续 3 天低于 12 个触发自查</li>
+            <li><strong>情绪预案</strong>：落后时不追旧账，从当前继续</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ====== 打卡记录 ====== -->
+<div class="page" id="page-checkin">
+  <div class="card">
+    <div class="card-title">✅ 今日打卡 <span class="badge">记录番茄钟</span></div>
+    <div style="margin-bottom:12px;">
+      <label style="font-size:13px;color:var(--ink-2);">日期：</label>
+      <input type="date" id="checkinDate" style="padding:6px 10px;border:1px solid var(--line);border-radius:6px;font-size:13px;">
+    </div>
+    <div class="checkin-grid">
+      <div class="checkin-card">
+        <h4>💻 计算机</h4>
+        <div class="target">目标：5 番茄钟（约 2.5h）</div>
+        <div class="counter">
+          <button onclick="changeCount('comp',-1)">−</button>
+          <div class="num" id="cnt-comp">0</div>
+          <button onclick="changeCount('comp',1)">+</button>
+        </div>
+        <div class="progress-bar"><div class="fill" id="bar-comp" style="width:0%"></div></div>
+      </div>
+      <div class="checkin-card">
+        <h4>📐 高等数学</h4>
+        <div class="target">目标：4 番茄钟（约 2h）</div>
+        <div class="counter">
+          <button onclick="changeCount('math',-1)">−</button>
+          <div class="num" id="cnt-math">0</div>
+          <button onclick="changeCount('math',1)">+</button>
+        </div>
+        <div class="progress-bar"><div class="fill" id="bar-math" style="width:0%"></div></div>
+      </div>
+      <div class="checkin-card">
+        <h4>📝 英语</h4>
+        <div class="target">目标：3 番茄钟（约 1.5h）</div>
+        <div class="counter">
+          <button onclick="changeCount('eng',-1)">−</button>
+          <div class="num" id="cnt-eng">0</div>
+          <button onclick="changeCount('eng',1)">+</button>
+        </div>
+        <div class="progress-bar"><div class="fill" id="bar-eng" style="width:0%"></div></div>
+      </div>
+      <div class="checkin-card">
+        <h4>📜 政治</h4>
+        <div class="target">目标：3 番茄钟（约 1.5h）</div>
+        <div class="counter">
+          <button onclick="changeCount('pol',-1)">−</button>
+          <div class="num" id="cnt-pol">0</div>
+          <button onclick="changeCount('pol',1)">+</button>
+        </div>
+        <div class="progress-bar"><div class="fill" id="bar-pol" style="width:0%"></div></div>
+      </div>
+    </div>
+    <div style="text-align:center;">
+      <button class="btn-save" onclick="saveCheckin()">💾 保存今日记录</button>
+      <div class="saved-msg" id="saveMsg">✅ 已保存到本地</div>
+    </div>
+  </div>
+</div>
+<!-- ====== 进度统计 ====== -->
+<div class="page" id="page-stats">
+  <div class="card">
+    <div class="card-title">📊 学习进度统计 <span class="badge">本周 &amp; 累计</span></div>
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-label">本周完成番茄钟</div>
+        <div class="stat-big" id="weekTotal">0</div>
+        <div class="stat-label">目标 98 个</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">累计完成番茄钟</div>
+        <div class="stat-big" id="allTotal">0</div>
+        <div class="stat-label">自计划开始</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">本周完成率</div>
+        <div class="stat-big" id="weekRate">0%</div>
+        <div class="stat-label">基于 98 目标</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">连续打卡天数</div>
+        <div class="stat-big" id="streak">0</div>
+        <div class="stat-label">天</div>
+      </div>
+    </div>
+    <div style="margin-top:20px;">
+      <h4 style="color:var(--navy-deep);margin-bottom:12px;">各科本周进度</h4>
+      <div class="stat-bar">
+        <div class="label">计算机</div>
+        <div class="track"><div class="fill" id="stat-comp" style="width:0%;background:var(--navy)"></div></div>
+        <div class="pct" id="pct-comp">0%</div>
+      </div>
+      <div class="stat-bar">
+        <div class="label">高等数学</div>
+        <div class="track"><div class="fill" id="stat-math" style="width:0%;background:#3A7D5E"></div></div>
+        <div class="pct" id="pct-math">0%</div>
+      </div>
+      <div class="stat-bar">
+        <div class="label">英语</div>
+        <div class="track"><div class="fill" id="stat-eng" style="width:0%;background:#7A5BA6"></div></div>
+        <div class="pct" id="pct-eng">0%</div>
+      </div>
+      <div class="stat-bar">
+        <div class="label">政治</div>
+        <div class="track"><div class="fill" id="stat-pol" style="width:0%;background:var(--amber)"></div></div>
+        <div class="pct" id="pct-pol">0%</div>
+      </div>
+    </div>
+    <div class="note">数据保存在浏览器本地（localStorage），清除浏览器数据会丢失，建议定期截图备份。</div>
+  </div>
+</div>
+
+<footer>
+  专升本五周复习计划 · 计算机专业 · 结合 2027 年专升本考试大纲 ｜ 番茄工作法 · 平缓均衡 · 先基础后刷题
+</footer>
+
+</div>
+<script>
+const START_DATE = '2026-09-22';
+const EXAM_DATE = '2027-03-27';
+
+const WEEK_GOALS = {
+  1: { title: '基础启动期', desc: 'C语言前四章收尾+数组入门；高数极限强化；英语词汇+阅读；政治毛概收尾' },
+  2: { title: '基础巩固期', desc: 'C语言函数与指针；高数导数与微分；英语阅读专项；政治习概 1–5 章' },
+  3: { title: '专题攻坚期', desc: 'C语言结构体与文件；高数中值定理；英语完形+语法填空；政治主观题方法' },
+  4: { title: '转型突破期', desc: '数据结构入门；高数不定积分；英语写作模板；政治背诵清单启动' },
+  5: { title: '小结模考期', desc: '计算机综合刷题；高数定积分；英语套题；政治时政+复盘' },
+};
+
+const GANTT_DATA = {
+  1: {
+    comp: { text: '选择 / 循环结构', sub: '复习强化' },
+    math: { text: '导数与微分', sub: '求导法则' },
+    pol: { text: '毛概 5–8 章', sub: '配章节选择' },
+    eng: { text: '词汇扩容 + 语法', sub: '每日 50–80 词' },
+    goal: '完成偏好习惯固化：番茄法跑通、四科节奏稳定、C 语言选择/循环题全对率 ≥ 80%',
+  },
+  2: {
+    comp: { text: '函数 + 数组', sub: '模块化编程' },
+    math: { text: '中值定理 · 洛必达', sub: '单调与极值' },
+    pol: { text: '开启习概 1–5 章', sub: '框架笔记' },
+    eng: { text: '阅读理解精读', sub: '每日 2 篇' },
+    goal: '高数进入导数运算自如；C 语言函数/数组过关；英语日均 2 篇精读成型',
+  },
+  3: {
+    comp: { text: '指针 · 结构体 · 文件', sub: '三大难点收尾' },
+    math: { text: '不定积分 + 定积分', sub: '换元/分部' },
+    pol: { text: '习概 6 章起收尾', sub: '主观题方法' },
+    eng: { text: '完形 + 语法填空', sub: '每周 3 篇' },
+    goal: '高数积分主线打通；C 语言全部章节收尾；政治主观题方法入门；完形专项见效',
+  },
+  4: {
+    comp: { text: '转入数据结构', sub: '线性表 · 栈 · 队列' },
+    math: { text: '二重积分 · 微分方程', sub: '多元入门' },
+    pol: { text: '选择强化串练', sub: '背诵清单启动' },
+    eng: { text: '写作第一轮', sub: '应用文模板' },
+    goal: '数据结构线性表/栈队列入门；写作模板背完 5 篇；政治背诵清单启动',
+  },
+  5: {
+    comp: { text: '树 / 图 · 查找 · 排序', sub: 'C 语言总复习' },
+    math: { text: '常数项级数 + 综合卷', sub: '第一次模考' },
+    pol: { text: '时政梳理 + 套卷', sub: '第一次模考' },
+    eng: { text: '成套模拟 + 仿写', sub: '第一次模考' },
+    goal: '四科第一次全真模考结束并复盘；产出个人错题清单，制定第 6 周起强化方向',
+  },
+};
+
+const TARGETS = { comp: 5, math: 4, eng: 3, pol: 3 };
+
+function getWeekNumber(today) {
+  const start = new Date(START_DATE);
+  const diff = Math.floor((today - start) / (1000 * 60 * 60 * 24));
+  if (diff < 0) return 0;
+  return Math.floor(diff / 7) + 1;
+}
+
+function getDayType(d) {
+  const w = d.getDay();
+  if (w === 0) return 'sun';
+  if (w === 1 || w === 4) return 'mon_thu';
+  if (w === 2 || w === 5) return 'tue_fri';
+  return 'wed_sat';
+}
+
+function formatDate(d) {
+  return d.toISOString().split('T')[0];
+}
+
+function loadData() {
+  try { return JSON.parse(localStorage.getItem('studyPlanData') || '{}'); }
+  catch { return {}; }
+}
+
+function saveData(data) {
+  localStorage.setItem('studyPlanData', JSON.stringify(data));
+}
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const page = btn.dataset.page;
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    if (page === 'stats') renderStats();
+    if (page === 'today') renderToday();
+  });
+});
+
+function renderToday() {
+  const today = new Date();
+  const weekNum = getWeekNumber(today);
+  const dayType = getDayType(today);
+  const dayNames = ['周日','周一','周二','周三','周四','周五','周六'];
+  document.getElementById('todayDate').textContent = formatDate(today) + ' ' + dayNames[today.getDay()];
+
+  if (weekNum < 1 || weekNum > 5) {
+    document.getElementById('todayWeekTitle').textContent = weekNum < 1 ? '计划尚未开始' : '五周计划已全部完成';
+    document.getElementById('todayTasks').innerHTML = '';
+    return;
+  }
+
+  const goal = WEEK_GOALS[weekNum];
+  document.getElementById('todayWeekTitle').textContent = '第 ' + weekNum + ' 周 · ' + goal.title;
+
+  const tasks = getTasksForDay(dayType, weekNum);
+  const container = document.getElementById('todayTasks');
+  const data = loadData();
+  const dateStr = formatDate(today);
+  const doneSet = new Set((data[dateStr] && data[dateStr].tasks) || []);
+
+  container.innerHTML = '';
+  tasks.forEach((task, idx) => {
+    const el = document.createElement('div');
+    el.className = 'task-item' + (doneSet.has(idx) ? ' done' : '');
+    el.innerHTML = '<div class="chk"></div><div class="txt">' + task.text + '</div><div class="tag">' + task.tag + '</div>';
+    el.onclick = () => {
+      el.classList.toggle('done');
+      const d = loadData();
+      if (!d[dateStr]) d[dateStr] = { tasks: [], counts: {} };
+      if (!d[dateStr].tasks) d[dateStr].tasks = [];
+      if (el.classList.contains('done')) d[dateStr].tasks.push(idx);
+      else d[dateStr].tasks = d[dateStr].tasks.filter(i => i !== idx);
+      saveData(d);
+    };
+    container.appendChild(el);
+  });
+}
+
+function getTasksForDay(type, week) {
+  const tasks = [];
+  if (type === 'mon_thu') {
+    tasks.push({ text: '英语词汇打卡：新词 30 + 复习旧词', tag: '2 番茄' });
+    tasks.push({ text: '高等数学：导数概念与求导法则 / 积分换元', tag: '4 番茄' });
+    tasks.push({ text: '计算机：章节精读 + 例程上机 + 章节习题', tag: '4 番茄' });
+    tasks.push({ text: '政治：推进 1 章 + 配套选择 20 题', tag: '3 番茄' });
+  } else if (type === 'tue_fri') {
+    tasks.push({ text: '英语词汇打卡：复习前 3 天单词', tag: '2 番茄' });
+    tasks.push({ text: '高等数学：中值定理 / 洛必达 / 综合练习', tag: '4 番茄' });
+    tasks.push({ text: '计算机：上机日 — 程序全敲一遍 + 改错', tag: '4 番茄' });
+    tasks.push({ text: '英语：精读 2 篇 → 逐句翻译 → 生词摘录', tag: '3 番茄' });
+    tasks.push({ text: '政治：选择专项 / 主观题方法训练', tag: '3 番茄' });
+  } else if (type === 'wed_sat') {
+    tasks.push({ text: '英语词汇 + 完形填空 2 篇', tag: '4 番茄' });
+    tasks.push({ text: '计算机：数据结构 / 综合练习', tag: '4 番茄' });
+    tasks.push({ text: '高等数学：综合题训练 + 错题复盘', tag: '4 番茄' });
+    tasks.push({ text: '政治：时政积累 + 主观题训练', tag: '2 番茄' });
+    tasks.push({ text: '当日复盘：进度检查 + 错题整理', tag: '1 番茄' });
+  } else {
+    tasks.push({ text: '计算机周测：按考试时长做一套', tag: '2 番茄' });
+    tasks.push({ text: '高等数学周测：按考试时长做一套', tag: '2 番茄' });
+    tasks.push({ text: '英语周测：阅读 + 完形 + 写作', tag: '2 番茄' });
+    tasks.push({ text: '政治周测：选择 + 主观题', tag: '2 番茄' });
+    tasks.push({ text: '错题整理（全科）', tag: '2 番茄' });
+    tasks.push({ text: '下周计划微调 + 薄弱点补强', tag: '2 番茄' });
+  }
+  return tasks;
+}
+document.querySelectorAll('.week-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.week-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderWeek(parseInt(btn.dataset.w));
+  });
+});
+
+function renderWeek(week) {
+  const data = GANTT_DATA[week];
+  const goal = WEEK_GOALS[week];
+  const container = document.getElementById('weekContent');
+  container.innerHTML = '<div class="gantt"><table><thead><tr><th style="text-align:left;width:160px;">科目</th><th>第 ' + week + ' 周 · ' + goal.title + '</th></tr></thead><tbody>' +
+    '<tr><td class="rowlabel">计算机</td><td><span class="bar c-comp">' + data.comp.text + '<br><small>' + data.comp.sub + '</small></span></td></tr>' +
+    '<tr><td class="rowlabel">高等数学</td><td><span class="bar c-math">' + data.math.text + '<br><small>' + data.math.sub + '</small></span></td></tr>' +
+    '<tr><td class="rowlabel">政治</td><td><span class="bar c-pol">' + data.pol.text + '<br><small>' + data.pol.sub + '</small></span></td></tr>' +
+    '<tr><td class="rowlabel">英语</td><td><span class="bar c-eng">' + data.eng.text + '<br><small>' + data.eng.sub + '</small></span></td></tr>' +
+    '<tr><td class="rowlabel">本周目标</td><td class="week-goal">' + data.goal + '</td></tr>' +
+    '</tbody></table></div>' +
+    '<div style="margin-top:16px;font-size:14px;"><strong>阶段定位：</strong>' + goal.desc + '</div>';
+}
+
+renderWeek(1);
+
+function toggleStrat(head) {
+  const body = head.nextElementSibling;
+  body.classList.toggle('collapsed');
+}
+
+const counts = { comp: 0, math: 0, eng: 0, pol: 0 };
+
+function changeCount(subject, delta) {
+  counts[subject] = Math.max(0, counts[subject] + delta);
+  document.getElementById('cnt-' + subject).textContent = counts[subject];
+  const pct = Math.min(counts[subject] / TARGETS[subject] * 100, 100);
+  document.getElementById('bar-' + subject).style.width = pct + '%';
+}
+
+function loadTodayCounts() {
+  const dateStr = document.getElementById('checkinDate').value;
+  const data = loadData();
+  const today = data[dateStr] && data[dateStr].counts ? data[dateStr].counts : {};
+  ['comp','math','eng','pol'].forEach(s => {
+    counts[s] = today[s] || 0;
+    document.getElementById('cnt-' + s).textContent = counts[s];
+    const pct = Math.min(counts[s] / TARGETS[s] * 100, 100);
+    document.getElementById('bar-' + s).style.width = pct + '%';
+  });
+}
+
+document.getElementById('checkinDate').value = formatDate(new Date());
+document.getElementById('checkinDate').addEventListener('change', loadTodayCounts);
+
+function saveCheckin() {
+  const dateStr = document.getElementById('checkinDate').value;
+  const data = loadData();
+  if (!data[dateStr]) data[dateStr] = { tasks: [], counts: {} };
+  data[dateStr].counts = JSON.parse(JSON.stringify(counts));
+  saveData(data);
+  const msg = document.getElementById('saveMsg');
+  msg.classList.add('show');
+  setTimeout(() => msg.classList.remove('show'), 2000);
+}
+function renderStats() {
+  const data = loadData();
+  const today = new Date();
+  const weekNum = getWeekNumber(today);
+  const start = new Date(START_DATE);
+  const weekStart = new Date(start.getTime() + (weekNum - 1) * 7 * 24 * 60 * 60 * 1000);
+
+  let weekTotal = 0, allTotal = 0;
+  let weekComp = 0, weekMath = 0, weekEng = 0, weekPol = 0;
+  let streak = 0;
+
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(weekStart.getTime() + i * 24 * 60 * 60 * 1000);
+    const ds = formatDate(d);
+    if (data[ds] && data[ds].counts) {
+      const c = data[ds].counts;
+      weekComp += c.comp || 0;
+      weekMath += c.math || 0;
+      weekEng += c.eng || 0;
+      weekPol += c.pol || 0;
+    }
+  }
+  weekTotal = weekComp + weekMath + weekEng + weekPol;
+
+  let hasPrev = true;
+  for (let i = 0; i <= 200; i++) {
+    const d = new Date(today.getTime() - i * 24 * 60 * 60 * 1000);
+    const ds = formatDate(d);
+    if (data[ds] && data[ds].counts) {
+      const c = data[ds].counts;
+      const daySum = (c.comp || 0) + (c.math || 0) + (c.eng || 0) + (c.pol || 0);
+      allTotal += daySum;
+      if (hasPrev && daySum > 0) streak++;
+      else hasPrev = false;
+    } else {
+      hasPrev = false;
+    }
+  }
+
+  document.getElementById('weekTotal').textContent = weekTotal;
+  document.getElementById('allTotal').textContent = allTotal;
+  document.getElementById('weekRate').textContent = Math.min(Math.round(weekTotal / 98 * 100), 100) + '%';
+  document.getElementById('streak').textContent = streak;
+
+  const subjects = [
+    { key: 'comp', name: '计算机', target: 35 },
+    { key: 'math', name: '高等数学', target: 28 },
+    { key: 'eng', name: '英语', target: 21 },
+    { key: 'pol', name: '政治', target: 21 },
+  ];
+  subjects.forEach(s => {
+    const val = s.key === 'comp' ? weekComp : s.key === 'math' ? weekMath : s.key === 'eng' ? weekEng : weekPol;
+    const pct = Math.min(Math.round(val / s.target * 100), 100);
+    document.getElementById('stat-' + s.key).style.width = pct + '%';
+    document.getElementById('pct-' + s.key).textContent = pct + '%';
+  });
+}
+
+function updateCountdown() {
+  const exam = new Date(EXAM_DATE);
+  const today = new Date();
+  const diff = Math.ceil((exam - today) / (1000 * 60 * 60 * 24));
+  document.getElementById('daysLeft').textContent = diff;
+}
+
+loadTodayCounts();
+renderToday();
+updateCountdown();
+</script>
+
+</body>
+</html>
